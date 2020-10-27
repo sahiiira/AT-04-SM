@@ -10,14 +10,13 @@ export default class App extends React.Component {
     this.state = {
       buttons: [7, 8, 9, '÷', 4, 5, 6, '×', 1, 2, 3, '-', 0, '.', '=', '+'],
       equation: '',
-      result: ' ',
+      result: '',
     }
   }
 
   operation(equationArray) {
 
     for (var i = 0; i <= equationArray.length; i++) {
-
       if (equationArray[i] == '×') {
         var operation = parseFloat(equationArray[i - 1]) * parseFloat(equationArray[i + 1]);
         equationArray.splice(i - 1, 3, operation);
@@ -66,9 +65,18 @@ export default class App extends React.Component {
       // }
     } else {
       if (char == '+' || char == '-' || char == '÷' || char == '×') {
-        this.setState({
-          equation: this.state.equation + " " + char + " ",
-        })
+        console.log(char)
+        if (this.state.equation[0] === undefined) {
+          if (char == '+' || char == '-') {
+            this.setState({
+              equation: 0 + " " + char + " ",
+            })
+          }
+        } else {
+          this.setState({
+            equation: this.state.equation + " " + char + " ",
+          })
+        }
       } else {
         this.setState({
           equation: this.state.equation + char,
