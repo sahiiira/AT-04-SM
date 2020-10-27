@@ -14,17 +14,22 @@ export default class App extends React.Component {
     }
   }
 
+  round(num, decimalPlaces = 0) {
+    num = Math.round(num + "e" + decimalPlaces);
+    return Number(num + "e" + -decimalPlaces);
+  }
+
   operation(equationArray) {
 
     for (var i = 0; i <= equationArray.length; i++) {
       if (equationArray[i] == '×') {
-        var operation = parseFloat(equationArray[i - 1]) * parseFloat(equationArray[i + 1]);
+        var operation = this.round(Number(equationArray[i - 1]) * Number(equationArray[i + 1]), 5);
         equationArray.splice(i - 1, 3, operation);
         i = 0;
       }
 
       if (equationArray[i] == '÷') {
-        var operation = parseFloat(equationArray[i - 1]) / parseFloat(equationArray[i + 1]);
+        var operation = this.round(Number(equationArray[i - 1]) / Number(equationArray[i + 1]), 5);
         equationArray.splice(i - 1, 3, operation);
         i = 0;
       }
@@ -33,18 +38,18 @@ export default class App extends React.Component {
     for (var i = 0; i <= equationArray.length; i++) {
 
       if (equationArray[i] == '+') {
-        var operation = parseFloat(equationArray[i - 1]) + parseFloat(equationArray[i + 1]);
+        var operation = this.round(Number(equationArray[i - 1]) + Number(equationArray[i + 1]), 5);
         equationArray.splice(i - 1, 3, operation);
         i = 0;
       }
 
       if (equationArray[i] == '-') {
-        var operation = parseFloat(equationArray[i - 1]) - parseFloat(equationArray[i + 1]);
+        var operation = this.round(Number(equationArray[i - 1]) - Number(equationArray[i + 1]), 5);
         equationArray.splice(i - 1, 3, operation);
         i = 0;
       }
     }
-
+    console.log(equationArray[0]);
     return equationArray;
   }
 
@@ -64,19 +69,35 @@ export default class App extends React.Component {
       })
       // }
     } else {
+
       if (char == '+' || char == '-' || char == '÷' || char == '×') {
-        console.log(char)
+
         if (this.state.equation[0] === undefined) {
-          if (char == '+' || char == '-') {
-            this.setState({
-              equation: 0 + " " + char + " ",
-            })
-          }
+
+          this.setState({
+            equation: Number(this.state.result) + " " + char + " ",
+          })
+
         } else {
           this.setState({
             equation: this.state.equation + " " + char + " ",
           })
         }
+
+      } else if (char == '.') {
+
+        if (this.state.equation[this.state.equation.length - 1] === undefined || this.state.equation[this.state.equation.length - 1] === '') {
+
+          this.setState({
+            equation: 0 + char,
+          })
+
+        } else if (char == '.') {
+          this.setState({
+            equation: this.state.equation + char,
+          })
+        }
+
       } else {
         this.setState({
           equation: this.state.equation + char,
@@ -89,6 +110,13 @@ export default class App extends React.Component {
     if ((lastChar == '-' || lastChar == '+' || lastChar == '÷' || lastChar == '×')
       && (char == '-' || char == '+' || char == '÷' || char == '×')) {
       var newEquation = this.state.equation.slice(0, -2) + char + " ";
+      this.setState({
+        equation: newEquation,
+      })
+    }
+
+    if (lastChar == '.' && char == '.') {
+      var newEquation = this.state.equation.slice(0, -1) + char;
       this.setState({
         equation: newEquation,
       })
