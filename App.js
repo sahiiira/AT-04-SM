@@ -58,16 +58,20 @@ export default class App extends React.Component {
     var equationArray = this.state.equation.split(" ");
 
     if (char == '=') {
-      /*if (this.operation(equationArray) == 'NaN') {
-        console.log('nan');
-      } else {*/
-      equationArray = this.operation(equationArray);
+      if (this.operation(equationArray) == 'NaN') {
 
-      this.setState({
-        result: equationArray,
-        equation: '',
-      })
-      // }
+        this.setState({
+          result: 'Formato inválido',
+          equation: '',
+        })
+      } else {
+        equationArray = this.operation(equationArray);
+
+        this.setState({
+          result: equationArray,
+          equation: '',
+        })
+      }
     } else {
 
       if (char == '+' || char == '-' || char == '÷' || char == '×') {
